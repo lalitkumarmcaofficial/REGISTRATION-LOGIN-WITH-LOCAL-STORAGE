@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Page</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Body Styling */
+    body {
+      background: linear-gradient(135deg, #74ebd5, #acb6e5);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Container Styling */
+    .profile-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    /* Header Styling */
+    h1 {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    /* User Information Styling */
+    .user-info {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .user-info p {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    /* Logout Button Styling */
+    .logout-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #74ebd5;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      text-decoration: none;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .logout-btn:hover {
+      background-color: #45a049;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    <h1>Your Profile</h1>
+    <div class="user-info" id="userDetails">
+      <!-- User information will be displayed here -->
+    </div>
+    <a href="index.html" class="logout-btn" onclick="logout()">Logout</a>
+  </div>
+
+  <script>
+    // Fetch user data from localStorage
+    document.addEventListener("DOMContentLoaded", () => {
+      const userDetails = document.getElementById("userDetails");
+      const userData = JSON.parse(localStorage.getItem("userData"));
+
+      if (userData) {
+        userDetails.innerHTML = `
+          <p><strong>Name:</strong> ${userData.name || "N/A"}</p>
+          <p><strong>Email:</strong> ${userData.email || "N/A"}</p>
+          <p><strong>Mobile:</strong> ${userData.mobile || "N/A"}</p>
+          <p><strong>Date of Birth:</strong> ${userData.dob || "N/A"}</p>
+        `;
+      } else {
+        userDetails.innerHTML = `<p>No user data found. Please log in.</p>`;
+      }
+    });
+
+    // Logout function
+    function logout() {
+      // Clear userData from localStorage
+      localStorage.removeItem("userData");
+
+      // Redirect to index.html with logout success message
+      const url = new URL("index.html", window.location.origin);
+      url.searchParams.append("message", "Logged out successfully");
+      window.location.href = url;
+    }
+  </script>
+</body>
+</html>

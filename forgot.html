@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page-Forgot-Password</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Forgot Password</h2>
+    <form id="loginForm">
+      <label id="usernameLabel" for="my_username">Username (Email or Mobile)</label>
+      <input type="text" id="my_username" required>
+      
+      <!-- <label for="dob">Date of Birth</label>
+      <input type="date" id="dob" required> -->
+      
+      <button type="submit">Reset your Password</button>
+    </form>
+    <p id="login_output"></p>
+    <p>Not registered? <a href="register.html">Register here</a></p>
+    <p><a href="index.html">Login here</a></p>
+
+  </div>
+
+
+  <script>
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("loginForm");
+  const output = document.getElementById("login_output");
+  const usernameLabel = document.getElementById("usernameLabel");
+  const usernameInput = document.getElementById("my_username");
+  const submitButton = form.querySelector("button");
+  let userData = JSON.parse(localStorage.getItem("userData"));
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const username = usernameInput.value.trim();
+
+    if (userData && (userData.email === username || userData.mobile === username)) {
+      // Valid username
+      output.textContent = ""; // Clear previous messages
+      showResetPasswordForm();
+    } else {
+      // Invalid username
+      output.textContent = "Invalid email or mobile number!";
+      output.style.color = "red";
+    }
+  });
+
+  function showResetPasswordForm() {
+    // Hide username label, input, and button
+    usernameLabel.style.display = "none";
+    usernameInput.style.display = "none";
+    submitButton.style.display = "none";
+
+    // Create New Password Input
+    const newPasswordLabel = document.createElement("label");
+    newPasswordLabel.htmlFor = "new_password";
+    newPasswordLabel.textContent = "Enter New Password";
+    newPasswordLabel.id = "newPasswordLabel";
+
+    const newPasswordInput = document.createElement("input");
+    newPasswordInput.type = "password";
+    newPasswordInput.id = "new_password";
+    newPasswordInput.required = true;
+
+    const newPasswordButton = document.createElement("button");
+    newPasswordButton.type = "button";
+    newPasswordButton.id = "submitNewPassword";
+    newPasswordButton.textContent = "Submit";
+
+    // Append new elements to form
+    form.appendChild(newPasswordLabel);
+    form.appendChild(newPasswordInput);
+    form.appendChild(newPasswordButton);
+
+    // Handle New Password Submission
+    newPasswordButton.addEventListener("click", () => {
+      const newPassword = newPasswordInput.value.trim();
+
+      if (newPassword) {
+        // Update confirmPassword in userData
+        userData.confirmPassword = newPassword;
+        localStorage.setItem("userData", JSON.stringify(userData));
+
+        // Show success message
+        console.log("Password has been successfully reset!");
+        
+        output.textContent = "Password has been successfully reset!";
+        output.style.color = "green";
+
+        // Remove new password elements
+        newPasswordLabel.remove();
+        newPasswordInput.remove();
+        newPasswordButton.remove();
+
+        // Show username input, label, and reset button again
+        usernameLabel.style.display = "block";
+        usernameInput.style.display = "block";
+        submitButton.style.display = "block";
+
+        // Reset the form
+        form.reset();
+      } else {
+        output.textContent = "Please enter a valid password!";
+        output.style.color = "red";
+      }
+    });
+  }
+});
+
+
+
+</script>
+</body>
+</html>
